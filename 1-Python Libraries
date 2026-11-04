@@ -1,0 +1,14 @@
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+a = np.array([[1, 2], [3, 4]]) # NumPy: arrays and maths
+print(a.mean(), a.T.tolist(), (a @ a).tolist())
+
+df = load_iris(as_frame=True).frame # Pandas: DataFrame
+print(df.shape, df.isnull().sum().sum()) # rows x columns, missing values
+print(df.groupby("target")["petal length (cm)"].mean()) # class-wise mean
+
+df.plot.scatter("sepal length (cm)", "petal length (cm)", c="target", cmap="viridis")
+plt.title("Iris scatter plot") # Matplotlib: visualisation
+plt.show()
