@@ -1,0 +1,12 @@
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
+
+X = load_iris().data[::5] # every 5th sample = 30 points
+labels = AgglomerativeClustering(n_clusters=3, linkage="ward").fit_predict(X)
+print("Cluster sizes:", [int((labels == c).sum()) for c in range(3)])
+
+Z = linkage(X, method="ward") # merge history
+dendrogram(Z); plt.title("Dendrogram (Ward linkage)")
+plt.show()
