@@ -1,0 +1,18 @@
+import numpy as np
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+rng = np.random.RandomState(0)
+X = np.sort(rng.rand(30, 1), axis=0)
+y = np.sin(2 * np.pi * X).ravel() + rng.normal(0, 0.25, 30) # noisy sine data
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.5, random_state=1)
+
+for d in [1, 4, 15]: # degree = model complexity
+ poly = PolynomialFeatures(d) # x -> [1, x, x^2, ..., x^d]
+ A_tr, A_te = poly.fit_transform(X_tr), poly.transform(X_te)
+ m = LinearRegression().fit(A_tr, y_tr)
+ tr = mean_squared_error(y_tr, m.predict(A_tr))
+ te = mean_squared_error(y_te, m.predict(A_te))
+ print(f"degree {d:2d} train MSE={tr:.3f} test MSE={te:.3f}")
