@@ -1,0 +1,12 @@
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+X = StandardScaler().fit_transform(load_iris().data) # 4 features
+pca = PCA(n_components=4).fit(X)
+print("Variance ratio :", pca.explained_variance_ratio_.round(3))
+print("Cumulative :", np.cumsum(pca.explained_variance_ratio_).round(3))
+
+X2 = PCA(n_components=2).fit_transform(X) # reduce 4D -> 2D
+print("Shape after PCA:", X2.shape)
