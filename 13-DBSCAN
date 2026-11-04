@@ -1,0 +1,10 @@
+import numpy as np
+from sklearn.datasets import make_moons
+from sklearn.cluster import DBSCAN
+
+X, _ = make_moons(n_samples=300, noise=0.07, random_state=0)
+X = np.vstack([X, [[2, 2], [-1.5, 1.5], [0.5, -1.5]]]) # add 3 obvious outliers
+labels = DBSCAN(eps=0.2, min_samples=5).fit_predict(X) # label -1 = noise / outlier
+
+print("Clusters found:", len(set(labels)) - (1 if -1 in labels else 0))
+print("Outliers (noise points):", int(np.sum(labels == -1)))
