@@ -1,0 +1,18 @@
+import numpy as np
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+
+X, y = load_diabetes(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
+sc = StandardScaler().fit(X_tr) # scale features
+X_tr, X_te = sc.transform(X_tr), sc.transform(X_te)
+
+models = {"Linear": LinearRegression(), "Ridge": Ridge(alpha=10),
+ "Lasso": Lasso(alpha=2), "ElasticNet": ElasticNet(alpha=0.5, l1_ratio=0.5)}
+ 
+for name, reg in models.items():
+ m = reg.fit(X_tr, y_tr)
+ zeros = int(np.sum(m.coef_ == 0)) # coefficients shrunk to 0
+ print(f"{name:10s} test R2={m.score(X_te, y_te):.3f} zero coefs={zeros}")
